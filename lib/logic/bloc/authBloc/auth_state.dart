@@ -14,3 +14,5 @@ class UserLoggedOut extends AuthState{}
 class UserSignedUp extends AuthState{}
 
 class UserSignUpFailure extends AuthState{}
+
+class OperationInProgress extends AuthState{}

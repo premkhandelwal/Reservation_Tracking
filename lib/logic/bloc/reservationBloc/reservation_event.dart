@@ -10,4 +10,24 @@ class AddReservationEvent extends ReservationEvent {
   });
 }
 
-class FetchReservation extends ReservationEvent{}
+class FetchReservation extends ReservationEvent {}
+
+class AddTrainEvent extends ReservationEvent {
+  final Map<String, dynamic> rows;
+  AddTrainEvent({
+    required this.rows,
+  });
+}
+
+class FetchTrain extends ReservationEvent {}
+
+class SearchEvent extends ReservationEvent {
+  List<Reservation> reservationList;
+  SearchBy searchBy;
+  String query;
+  SearchEvent({
+    required this.reservationList,
+    required this.searchBy,
+    required this.query,
+  });
+}

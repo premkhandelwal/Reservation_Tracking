@@ -4,8 +4,8 @@ import 'package:reservation_tracking/logic/bloc/authBloc/auth_bloc.dart';
 import 'package:reservation_tracking/logic/bloc/reservationBloc/reservation_bloc.dart';
 import 'package:reservation_tracking/logic/repository/authRepository.dart';
 import 'package:reservation_tracking/logic/repository/dataRepository.dart';
-import 'package:reservation_tracking/logic/services/sessionConstants.dart';
-import 'package:reservation_tracking/logic/services/sharedObjects.dart';
+import 'package:reservation_tracking/services/sessionConstants.dart';
+import 'package:reservation_tracking/services/sharedObjects.dart';
 import 'package:reservation_tracking/screens/homePage.dart';
 import 'package:reservation_tracking/screens/loginScreen.dart';
 

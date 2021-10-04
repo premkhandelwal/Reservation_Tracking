@@ -13,6 +13,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }) : super(AuthInitial()) {
     on<AuthEvent>((event, emit) async {
       if (event is SignInRequested) {
+        emit(OperationInProgress());
         bool success =
             await authRepository.signIn(event.emailId, event.password);
         if (success) {
@@ -21,10 +22,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(UserLogInFailure());
         }
       } else if (event is SignOutRequested) {
+        emit(OperationInProgress());
         await authRepository.signOut();
         emit(UserLoggedOut());
       } else if (event is SignUpRequested) {
-        bool isSuccess = await authRepository.signUp(event.emailId, event.password);
+        emit(OperationInProgress());
+        bool isSuccess = await authRepository.signUp(
+            event.name, event.emailId, event.password);
         if (isSuccess) {
           emit(UserSignedUp());
         } else {

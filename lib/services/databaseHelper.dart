@@ -44,6 +44,7 @@ class DatabaseHelper {
       '''
           CREATE TABLE UsersList (
             Sr_No  INTEGER PRIMARY KEY AUTOINCREMENT,
+            Name VARCHAR(50) NOT NULL,
             EmailId VARCHAR(50) NOT NULL, 
             Password VARCHAR(20) NOT NULL
           )
@@ -53,11 +54,27 @@ class DatabaseHelper {
       '''
           CREATE TABLE Reservation (
             Sr_No  INTEGER PRIMARY KEY AUTOINCREMENT,
+            CustomerID VARCHAR(200) NOT NULL, 
             TrainID VARCHAR(200) NOT NULL,
             Source VARCHAR(200) NOT NULL,
             Destination VARCHAR(200) NOT NULL,
             AgeofPassenger INT NOT NULL,
-            DateofTravel DATETIME NOT NULL
+            DateofTravel DATETIME NOT NULL,
+            FOREIGN KEY(CustomerID) REFERENCES UsersList(Sr_No),
+            FOREIGN KEY(TrainID) REFERENCES Trains(Sr_No)
+
+          )
+          ''',
+    );
+    await db.execute(
+      '''
+          CREATE TABLE Trains (
+            Sr_No  INTEGER PRIMARY KEY AUTOINCREMENT,
+            TrainName VARCHAR(200) NOT NULL, 
+            SourceStation VARCHAR(200) NOT NULL,
+            DestinationStation VARCHAR(200) NOT NULL,
+            DepartureTime VARCHAR(10) NOT NULL,
+            ArrivalTime VARCHAR(10) NOT NULL
           )
           ''',
     );
@@ -77,8 +94,8 @@ class DatabaseHelper {
     }
   }
 
-  Future<List<Map<String, dynamic>>> fetch(String table) async {
+  Future<List<Map<String, dynamic>>> fetch(String table, [String? condition]) async {
     Database db = await instance.database;
-    return await db.rawQuery("SELECT * FROM $table");
+    return await db.rawQuery(condition != null ? "SELECT * FROM $table where $condition" : "SELECT * FROM $table");
   }
 }

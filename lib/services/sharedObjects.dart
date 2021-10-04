@@ -1,4 +1,4 @@
-import 'package:reservation_tracking/logic/services/sessionConstants.dart';
+import 'package:reservation_tracking/services/sessionConstants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedObjects {
@@ -51,7 +51,6 @@ class CachedSharedPreference {
 
   Future<void> clearAll() async {
     await sharedPreferences?.clear();
-    SessionConstants.clear();
     map = Map();
   }
 

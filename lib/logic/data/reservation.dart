@@ -2,6 +2,7 @@ import 'dart:convert';
 
 class Reservation {
   final String? reservationCode;
+  final String? customerID;
   final String? trainName;
   final String? trainCode;
   final String? sourceStation;
@@ -10,6 +11,7 @@ class Reservation {
   final String? dateofTravel;
   Reservation({
     this.reservationCode,
+    this.customerID,
     required this.trainName,
     required this.trainCode,
     required this.sourceStation,
@@ -21,6 +23,7 @@ class Reservation {
   static Map<String, dynamic> toMap(Reservation reservation) {
     return {
       'TrainID': reservation.trainName,
+      'CustomerID':reservation.customerID,
       'Source': reservation.sourceStation,
       'Destination': reservation.destinationStation,
       'AgeofPassenger': reservation.ageofPassenger,
@@ -41,6 +44,7 @@ class Reservation {
     return Reservation(
       trainName: map['TrainID'],
       reservationCode: "R${map['Sr_No']}",
+      customerID: map["CustomerID"],
       trainCode: map['TrainID'],
       sourceStation: map['Source'],
       destinationStation: map['Destination'],

@@ -1,12 +1,12 @@
 import 'package:reservation_tracking/logic/data/user.dart';
-import 'package:reservation_tracking/logic/services/databaseHelper.dart';
-import 'package:reservation_tracking/logic/services/sessionConstants.dart';
-import 'package:reservation_tracking/logic/services/sharedObjects.dart';
+import 'package:reservation_tracking/services/databaseHelper.dart';
+import 'package:reservation_tracking/services/sessionConstants.dart';
+import 'package:reservation_tracking/services/sharedObjects.dart';
 
 abstract class BaseAuthProvider {
   Future<bool> signIn(String emailId, String password);
   Future<void> signOut();
-  Future<bool> signUp(String emailId, String password);
+  Future<bool> signUp(String customerName, String emailId, String password);
 }
 
 class AuthProvider extends BaseAuthProvider {
@@ -17,6 +17,10 @@ class AuthProvider extends BaseAuthProvider {
     User? user = await databaseHelper.login(emailId, password);
     if (user != null) {
       SharedObjects.prefs?.setString(SessionConstants.sessionUid, user.userId!);
+      SharedObjects.prefs
+          ?.setString(SessionConstants.sessionName, user.userName!);
+      SharedObjects.prefs
+          ?.setString(SessionConstants.sessionEmail, user.emailId!);
       return true;
     }
     return false;
@@ -24,14 +28,16 @@ class AuthProvider extends BaseAuthProvider {
 
   @override
   Future<void> signOut() async {
-   await SharedObjects.prefs?.clearSession();
-   await SharedObjects.prefs?.clearAll();
+    SessionConstants.clear();
+    await SharedObjects.prefs?.clearSession();
+    await SharedObjects.prefs?.clearAll();
   }
 
   @override
-  Future<bool> signUp(String emailId, String password) async {
-    int result = await databaseHelper
-        .insert("UsersList", {"EmailId": emailId, "Password": password});
+  Future<bool> signUp(
+      String customerName, String emailId, String password) async {
+    int result = await databaseHelper.insert("UsersList",
+        {"EmailId": emailId, "Password": password, "Name": customerName});
     if (result != 0) {
       return true;
     }
