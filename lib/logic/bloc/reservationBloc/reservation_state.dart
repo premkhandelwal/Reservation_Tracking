@@ -20,6 +20,7 @@ class FetchedReservation extends ReservationState {
 class AddingTrain extends ReservationState{}
 
 class AddedTrain extends ReservationState {}
+
 class FailedAddingTrain extends ReservationState {}
 
 class TrainAlreadyExists extends ReservationState{}
@@ -39,3 +40,5 @@ class SearchState extends ReservationState{
     required this.reservationList,
   });
 }
+
+class FromTraintoReservationState extends ReservationState{}

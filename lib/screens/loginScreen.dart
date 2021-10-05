@@ -231,6 +231,23 @@ class _LoginScreenState extends State<LoginScreen>
                       ],
                     ),
                   );
+                }else if(state is UserAlreadyExists){
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: Text("Message"),
+                      content: Text(
+                        "User with the entered credentials already exists. Please sign up using different account",
+                      ),
+                      actions: [
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(ctx);
+                            },
+                            child: Text("Ok"))
+                      ],
+                    ),
+                  );
                 }
               },
               builder: (context, state) {

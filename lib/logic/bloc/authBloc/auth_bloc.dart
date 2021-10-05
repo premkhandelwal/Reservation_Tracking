@@ -27,12 +27,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(UserLoggedOut());
       } else if (event is SignUpRequested) {
         emit(OperationInProgress());
-        bool isSuccess = await authRepository.signUp(
+        String result = await authRepository.signUp(
             event.name, event.emailId, event.password);
-        if (isSuccess) {
-          emit(UserSignedUp());
-        } else {
+        if (result == "Email Already Exists") {
+          emit(UserAlreadyExists());
+        } else if (result == "Failure") {
           emit(UserSignUpFailure());
+        } else {
+          emit(UserSignedUp());
         }
       }
     });

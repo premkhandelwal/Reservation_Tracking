@@ -15,4 +15,6 @@ class UserSignedUp extends AuthState{}
 
 class UserSignUpFailure extends AuthState{}
 
+class UserAlreadyExists extends AuthState{}
+
 class OperationInProgress extends AuthState{}

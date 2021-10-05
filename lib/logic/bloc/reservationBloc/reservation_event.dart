@@ -22,12 +22,15 @@ class AddTrainEvent extends ReservationEvent {
 class FetchTrain extends ReservationEvent {}
 
 class SearchEvent extends ReservationEvent {
-  List<Reservation> reservationList;
-  SearchBy searchBy;
-  String query;
+  final List<Reservation> reservationList;
+  final SearchBy searchBy;
+  final String query;
   SearchEvent({
     required this.reservationList,
     required this.searchBy,
     required this.query,
   });
 }
+
+class FromTraintoReservationEvent extends ReservationEvent{}
+

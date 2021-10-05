@@ -4,7 +4,8 @@ import 'package:reservation_tracking/logic/bloc/reservationBloc/reservation_bloc
 import 'package:reservation_tracking/logic/data/trains.dart';
 
 class AddNewTrain extends StatefulWidget {
-  const AddNewTrain({Key? key}) : super(key: key);
+  final bool? fromReservationScreen;
+  const AddNewTrain({Key? key, this.fromReservationScreen}) : super(key: key);
 
   @override
   _AddNewTrainState createState() => _AddNewTrainState();
@@ -176,6 +177,13 @@ class _AddNewTrainState extends State<AddNewTrain> {
                           actions: [
                             ElevatedButton(
                                 onPressed: () {
+                                  if (widget.fromReservationScreen != null &&
+                                      widget.fromReservationScreen!) {
+                                    context
+                                        .read<ReservationBloc>()
+                                        .add(FromTraintoReservationEvent());
+
+                                  }
                                   Navigator.pop(ctx);
                                   Navigator.pop(context);
                                 },
@@ -183,21 +191,21 @@ class _AddNewTrainState extends State<AddNewTrain> {
                           ],
                         ),
                       );
-                    }else if(state is TrainAlreadyExists){
-                       showDialog(
-                            context: context,
-                            builder: (ctx) => AlertDialog(
-                              title: Text("Message"),
-                              content: Text("Train Already Exists!!"),
-                              actions: [
-                                ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text("Ok"))
-                              ],
-                            ),
-                          );
+                    } else if (state is TrainAlreadyExists) {
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: Text("Message"),
+                          content: Text("Train Already Exists!!"),
+                          actions: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text("Ok"))
+                          ],
+                        ),
+                      );
                     }
                   },
                   builder: (context, state) {

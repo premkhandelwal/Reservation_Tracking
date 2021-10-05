@@ -37,7 +37,10 @@ class _AddNewReservationState extends State<AddNewReservation> {
   Widget build(BuildContext context) {
     return BlocConsumer<ReservationBloc, ReservationState>(
       listener: (context, state) {
-        if (state is FetchedTrains && state.trainsList.isEmpty) {
+        if (state is FromTraintoReservationState || state is AddedTrain) {
+          context.read<ReservationBloc>().add(FetchTrain());
+            selectedTrain = null;
+        } else if (state is FetchedTrains && state.trainsList.isEmpty) {
           showDialog(
             context: context,
             builder: (ctx) => AlertDialog(
@@ -54,11 +57,14 @@ class _AddNewReservationState extends State<AddNewReservation> {
             ),
           );
         } else if (state is FetchedTrains) {
-          trains = state.trainsList;
+            trains = List.from(state.trainsList);
+            
         }
       },
       builder: (context, state) {
-        if (state is FetchingTrains) {
+        if (state is FetchingTrains ||
+            state is FromTraintoReservationState ||
+            state is AddNewTrain) {
           return Center(
             child: CircularProgressIndicator(),
           );
@@ -89,7 +95,9 @@ class _AddNewReservationState extends State<AddNewReservation> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (ctx) => AddNewTrain(),
+                                      builder: (ctx) => AddNewTrain(
+                                        fromReservationScreen: true,
+                                      ),
                                     ));
                               },
                               icon: Icon(Icons.add))),
@@ -212,7 +220,7 @@ class _AddNewReservationState extends State<AddNewReservation> {
                       initialValue: dateofTravel,
                       onShowPicker: (context, currentValue) async {
                         final time = showDatePicker(
-                          firstDate: DateTime(1500),
+                          firstDate: DateTime.now(),
                           lastDate: DateTime(3000),
                           initialDate: DateTime.now(),
                           helpText: "Select Date",
@@ -260,7 +268,9 @@ class _AddNewReservationState extends State<AddNewReservation> {
                               context.read<ReservationBloc>().add(
                                   AddReservationEvent(
                                       rows: Reservation.toMap(Reservation(
-                                          customerID: SharedObjects.prefs?.getString(SessionConstants.sessionUid),
+                                          customerID: SharedObjects.prefs
+                                              ?.getString(
+                                                  SessionConstants.sessionUid),
                                           trainName: selectedTrain!.trainName,
                                           trainCode: "T1",
                                           sourceStation: sourceController.text,

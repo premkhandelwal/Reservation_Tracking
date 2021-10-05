@@ -6,7 +6,7 @@ import 'package:reservation_tracking/services/sharedObjects.dart';
 abstract class BaseAuthProvider {
   Future<bool> signIn(String emailId, String password);
   Future<void> signOut();
-  Future<bool> signUp(String customerName, String emailId, String password);
+  Future<String> signUp(String customerName, String emailId, String password);
 }
 
 class AuthProvider extends BaseAuthProvider {
@@ -34,13 +34,20 @@ class AuthProvider extends BaseAuthProvider {
   }
 
   @override
-  Future<bool> signUp(
+  Future<String> signUp(
       String customerName, String emailId, String password) async {
-    int result = await databaseHelper.insert("UsersList",
-        {"EmailId": emailId, "Password": password, "Name": customerName});
-    if (result != 0) {
-      return true;
+    List<Map<String, dynamic>> emailAlreadyExists =
+        await databaseHelper.fetch("UsersList", "EmailId ==  '$emailId'");
+    if (emailAlreadyExists.isEmpty) {
+      int result = await databaseHelper.insert("UsersList",
+          {"EmailId": emailId, "Password": password, "Name": customerName});
+      if (result > 0) {
+        return "Success";
+      } else {
+        return "Failure";
+      }
+    } else {
+      return "Email Already Exists";
     }
-    return false;
   }
 }

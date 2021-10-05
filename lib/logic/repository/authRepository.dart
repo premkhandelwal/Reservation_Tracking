@@ -3,7 +3,7 @@ import 'package:reservation_tracking/logic/providers/authProvider.dart';
 abstract class BaseAuthRepository {
   Future<bool> signIn( String emailId, String password);
   Future<void> signOut();
-  Future<bool> signUp(String customerName, String emailId, String password);
+  Future<String> signUp(String customerName, String emailId, String password);
 }
 
 class AuthRepository extends BaseAuthRepository {
@@ -16,5 +16,5 @@ class AuthRepository extends BaseAuthRepository {
   Future<void> signOut() async => await authProvider.signOut();
 
   @override
-  Future<bool> signUp(String customerName,String emailId, String password) async =>await  authProvider.signUp(customerName,emailId,password);
+  Future<String> signUp(String customerName,String emailId, String password) async =>await  authProvider.signUp(customerName,emailId,password);
 }

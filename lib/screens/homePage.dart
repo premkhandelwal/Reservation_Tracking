@@ -119,12 +119,8 @@ class _HomePageState extends State<HomePage> {
         IconButton(
           icon: const Icon(Icons.clear),
           onPressed: () {
-            if (_searchQueryController == null ||
-                _searchQueryController.text.isEmpty) {
-              Navigator.pop(context);
-              return;
-            }
-            _clearSearchQuery();
+            _stopSearching();
+            return;
           },
         ),
       ];
@@ -139,9 +135,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _startSearch() {
-    ModalRoute.of(context)!
-        .addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearching));
-
     setState(() {
       _isSearching = true;
     });
@@ -160,12 +153,13 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _isSearching = false;
     });
+    context.read<ReservationBloc>().add(FetchReservation());
   }
 
   void _clearSearchQuery() {
     setState(() {
       _searchQueryController.clear();
-      updateSearchQuery("");
+      // updateSearchQuery("");
     });
   }
 
